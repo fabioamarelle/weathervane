@@ -27,4 +27,16 @@ public class SavedLocation {
     public String getLon() {
         return lon;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
 }

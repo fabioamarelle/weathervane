@@ -8,14 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SavedLocationDatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "savedlocations.db";
-    private final Context context;
 
     public SavedLocationDatabaseHelper(Context context) {
         super(context, DB_NAME, null, 1);
-        this.context = context;
     }
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE saved_locations(id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT, lat TEXT, lon TEXT)");
+        db.execSQL("INSERT INTO saved_locations (id, nom, lat, lon) VALUES (0, 'Ubicació actual', '-', '-')");
     }
 
     // Actualització de la base de dades
@@ -37,11 +36,25 @@ public class SavedLocationDatabaseHelper extends SQLiteOpenHelper {
         return columnesAfectades != -1;
     }
 
+    public boolean updateCurrentLocation (String nom, String lat, String lon) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("nom", nom);
+        values.put("lat", lat);
+        values.put("lon", lon);
+
+        long columnesAfectades = db.update("saved_locations", values, "id=?", new String[]{"0"});
+        db.close();
+
+        return columnesAfectades != -1;
+    }
+
     // Obtenir ubicacions
     public Cursor getLocations() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query(
-            "saved_locations",null,null,null,null,null,null
+            "saved_locations",null,null,null,null,null,"id"
         );
     }
 

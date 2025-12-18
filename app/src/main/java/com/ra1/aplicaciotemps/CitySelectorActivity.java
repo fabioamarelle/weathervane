@@ -46,7 +46,6 @@ public class CitySelectorActivity extends AppCompatActivity {
         Cursor c = db.getLocations();
 
         if (!(c.getCount() == 0)) {
-
             c.moveToFirst();
             do {
                 int id = c.getInt(0);
@@ -61,7 +60,7 @@ public class CitySelectorActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        SavedLocationAdapter savedLocationAdapter = new SavedLocationAdapter(savedLocationList);
+        SavedLocationAdapter savedLocationAdapter = new SavedLocationAdapter(this, savedLocationList);
         recyclerView.setAdapter(savedLocationAdapter);
 
         // Buscador de ciutats

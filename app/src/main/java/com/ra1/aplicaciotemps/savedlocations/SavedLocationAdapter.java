@@ -15,7 +15,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ra1.aplicaciotemps.R;
+import com.ra1.aplicaciotemps.openweatherapi.Geocoding;
 import com.ra1.aplicaciotemps.openweatherapi.Weather;
+import com.ra1.aplicaciotemps.utilities.LocationManager;
 
 import org.json.JSONObject;
 
@@ -25,9 +27,13 @@ import java.util.List;
 public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdapter.MyViewHolder> {
 
     private List<SavedLocation> savedLocationList;
+    private LocationManager locationManager;
+    private Context context;
 
-    public SavedLocationAdapter(List<SavedLocation> savedLocationList) {
+    public SavedLocationAdapter(Context context, List<SavedLocation> savedLocationList) {
+        this.context = context;
         this.savedLocationList = savedLocationList;
+        this.locationManager = new LocationManager(context);
     }
 
     @NonNull
@@ -44,25 +50,67 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
 
         holder.nomCiutat.setText(savedLocation.getName());
 
-        holder.relativeLayout.setOnClickListener(v -> {
-            Context context = v.getContext();
+        // --- NEW LOGIC STARTS HERE ---
 
+        if (savedLocation.getId() == 0) {
+            holder.deleteButton.setVisibility(View.GONE);
+            handleCurrentLocationWeather(holder, savedLocation);
+
+        } else {
+            holder.deleteButton.setVisibility(View.VISIBLE);
+
+            ArrayList<String> coordinates = new ArrayList<>();
+            coordinates.add(savedLocation.getLat());
+            coordinates.add(savedLocation.getLon());
+            fetchWeather(coordinates, holder);
+        }
+
+        holder.relativeLayout.setOnClickListener(v -> {
             if (context instanceof Activity) {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("CITY_NAME", savedLocation.getName());
-                returnIntent.putExtra("LAT", Double.parseDouble(savedLocation.getLat()));
-                returnIntent.putExtra("LON", Double.parseDouble(savedLocation.getLon()));
-                ((Activity) context).setResult(Activity.RESULT_OK, returnIntent);
-                ((Activity) context).finish();
+                try {
+                    returnIntent.putExtra("LAT", Double.parseDouble(savedLocation.getLat()));
+                    returnIntent.putExtra("LON", Double.parseDouble(savedLocation.getLon()));
+                    ((Activity) context).setResult(Activity.RESULT_OK, returnIntent);
+                    ((Activity) context).finish();
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
+        if (holder.deleteButton.getVisibility() == View.VISIBLE) {
+            holder.deleteButton.setOnClickListener(v -> deleteItem(holder, savedLocation.getId(), position));
+        }
+    }
+
+    private void handleCurrentLocationWeather(MyViewHolder holder, SavedLocation savedLocation) {
+        locationManager.getLastLocation(new LocationManager.LocationResultCallback() {
+            @Override
+            public void onLocationReady(ArrayList<String> coordinates) {
+                SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(context);
+                String cityName = Geocoding.getCityNameByCoordinates(coordinates);
+
+                savedLocationDB.updateCurrentLocation(cityName, coordinates.get(0), coordinates.get(1));
+
+                savedLocation.setName("Ubicació actual");
+                savedLocation.setLat(coordinates.get(0));
+                savedLocation.setLon(coordinates.get(1));
+
+                holder.itemView.post(() -> holder.nomCiutat.setText("Ubicació actual"));
+
+                fetchWeather(coordinates, holder);
+            }
+
+            @Override
+            public void onLocationError(String message) {}
+        });
+    }
+
+    private void fetchWeather(ArrayList<String> coordinates, MyViewHolder holder) {
         new Thread(() -> {
             try {
-                ArrayList<String> coordinates = new ArrayList<>();
-                coordinates.add(savedLocation.getLat());
-                coordinates.add(savedLocation.getLon());
-
                 String result = Weather.getWeather(coordinates);
 
                 if (result != null) {
@@ -70,12 +118,9 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
                     long textTemperatura = Math.round(weatherData.getJSONObject("main").getDouble("temp"));
                     String textClima = weatherData.getJSONArray("weather").getJSONObject(0).getString("main");
 
-                    holder.deleteButton.setOnClickListener(v -> deleteItem(holder, savedLocation.getId()));
-
                     holder.itemView.post(() -> {
                         holder.temperaturaCiutat.setText(textTemperatura + "º");
                         Weather.canviarImatgeClima(textClima, holder.climaCiutat);
-
                         updateBackground(holder, textClima);
                     });
                 }
@@ -85,15 +130,16 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
         }).start();
     }
 
-    private void deleteItem(MyViewHolder holder, int id) {
-        SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(holder.itemView.getContext());
+    private void deleteItem(MyViewHolder holder, int id, int position) {
+        SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(context);
         savedLocationDB.deleteLocation(id);
-        savedLocationList.removeIf(savedLocation -> savedLocation.getId() == id);
-        this.notifyDataSetChanged();
+
+        savedLocationList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, savedLocationList.size());
     }
 
     private void updateBackground(MyViewHolder holder, String clima) {
-        Context context = holder.itemView.getContext();
         int drawableId;
         switch (clima) {
             case "Clear": drawableId = R.drawable.clearcard; break;
@@ -117,15 +163,12 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
         RelativeLayout relativeLayout;
 
         public MyViewHolder(@NonNull View itemView) {
-
             super(itemView);
-
             nomCiutat = itemView.findViewById(R.id.nom_ciutat);
             temperaturaCiutat = itemView.findViewById(R.id.temperatura_ciutat);
             climaCiutat = itemView.findViewById(R.id.clima_ciutat);
             deleteButton = itemView.findViewById(R.id.delete_button);
             relativeLayout = itemView.findViewById(R.id.relative_layout);
-
         }
     }
 }
