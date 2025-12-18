@@ -1,34 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#696995">
+    android:background="#696995"
+    android:padding="24dp">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="225dp"
-        android:layout_height="137dp"
-        android:layout_marginTop="55dp"
-        android:layout_marginBottom="68dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInformacio"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="266dp"
+        android:layout_height="133dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/appName"
+        app:layout_constraintEnd_toEndOf="@+id/appName"
+        app:layout_constraintStart_toStartOf="@+id/studentName"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/cloudy" />
 
     <TextView
-        android:id="@+id/textInformacio"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="57dp"
-        android:layout_marginEnd="57dp"
-        android:layout_marginBottom="603dp"
-        android:text="Fabio Amarelle Rodrigues\n Projecte RA1 i RA2 \n 0489 - Programació multimèdia i dispositius\n"
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="104dp"
+        android:text="Previsió del temps"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/labelDev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/courseInfo"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/labelDev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:letterSpacing="0.1"
+        android:text="Desenvolupat per"
+        android:textColor="#A0A0C0"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/studentName"
+        app:layout_constraintEnd_toEndOf="@+id/studentName"
+        app:layout_constraintStart_toStartOf="@+id/studentName"
+        app:layout_constraintTop_toBottomOf="@+id/appName" />
+
+    <TextView
+        android:id="@+id/studentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Fabio Amarelle Rodrigues"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/courseInfo"
+        app:layout_constraintEnd_toEndOf="@+id/courseInfo"
+        app:layout_constraintStart_toStartOf="@+id/courseInfo"
+        app:layout_constraintTop_toBottomOf="@+id/labelDev" />
+
+    <TextView
+        android:id="@+id/courseInfo"
+        android:layout_width="363dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="376dp"
+        android:text="Projecte RA1 i RA2\nProgramació Multimèdia i\nDispositius Mòbils"
         android:textAlignment="center"
-        android:textColor="#E9E9E9"
+        android:textColor="#E0E0E0"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/studentName" />
+
+    <TextView
+        android:id="@+id/footer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="103dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="16dp"
+        android:text="© 2025 Institut Jaume Huguet"
+        android:textColor="#8080A0"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="@+id/courseInfo"
+        app:layout_constraintTop_toBottomOf="@+id/courseInfo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
