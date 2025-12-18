@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#696995"
+    android:fitsSystemWindows="true"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/cityTitleText"
+        android:layout_width="271dp"
+        android:layout_height="35dp"
+        android:text="Valls"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btnChangeLocation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ubicacioActualText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Ubicació actual"
+        android:textColor="#E0E0E0"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/cityTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/cityTitleText" />
+
+    <ImageButton
+        android:id="@+id/btnChangeLocation"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Change Location"
+        app:layout_constraintBottom_toBottomOf="@+id/ubicacioActualText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cityTitleText"
+        app:layout_constraintTop_toTopOf="@+id/cityTitleText"
+        app:srcCompat="@android:drawable/ic_menu_search"
+        app:tint="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/imatgeClima"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="32dp"
+        android:contentDescription="Weather Icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ubicacioActualText"
+        tools:srcCompat="@drawable/clear_day" />
+
+    <TextView
+        android:id="@+id/clima"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Cel clar"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imatgeClima" />
+
+    <TextView
+        android:id="@+id/temperatura"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:text="22º"
+        android:textColor="#FFFFFF"
+        android:textSize="96sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clima" />
+
+    <TextView
+        android:id="@+id/sensacioTermica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sensació tèrmica: 24º"
+        android:textColor="#E0E0E0"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/temperatura" />
+
+    <TextView
+        android:id="@+id/rangTemperatura"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Mínima: 15º - Màxima 25º"
+        android:textColor="#E0E0E0"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sensacioTermica" />
+
+
+    <LinearLayout
+        android:id="@+id/forecastContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rangTemperatura">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/previsioData1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="13/10"
+                android:textColor="#E0E0E0"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/previsioIcona1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                tools:srcCompat="@drawable/clear_day" />
+
+            <TextView
+                android:id="@+id/previsioTempMaxima1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="21º"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/previsioTempMinima1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6º"
+                android:textColor="#CCCCCC" />
+
+            <TextView
+                android:id="@+id/previsioPluja1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="30%"
+                android:textColor="#AACCFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/previsioData2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="14/10"
+                android:textColor="#E0E0E0"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/previsioIcona2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                tools:srcCompat="@drawable/clear_day" />
+
+            <TextView
+                android:id="@+id/previsioTempMaxima2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="20º"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/previsioTempMinima2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8º"
+                android:textColor="#CCCCCC" />
+
+            <TextView
+                android:id="@+id/previsioPluja2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="10%"
+                android:textColor="#AACCFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/previsioData3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="15/10"
+                android:textColor="#E0E0E0"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/previsioIcona3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                tools:srcCompat="@drawable/clear_day" />
+
+            <TextView
+                android:id="@+id/previsioTempMaxima3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="19º"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/previsioTempMinima3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5º"
+                android:textColor="#CCCCCC" />
+
+            <TextView
+                android:id="@+id/previsioPluja3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="0%"
+                android:textColor="#AACCFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ubicacioActual"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Ubicació actual: N/A"
+        android:textAlignment="center"
+        android:textColor="#E0E0E0"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/infoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_dialog_info"
+        app:tint="#E0E0E0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
