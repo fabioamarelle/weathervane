@@ -1,18 +1,21 @@
-package com.ra1.aplicaciotemps;
+package com.ra1.aplicaciotemps.savedlocations;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.ra1.aplicaciotemps.R;
+import com.ra1.aplicaciotemps.openweatherapi.Weather;
 
 import org.json.JSONObject;
 
@@ -67,6 +70,8 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
                     long textTemperatura = Math.round(weatherData.getJSONObject("main").getDouble("temp"));
                     String textClima = weatherData.getJSONArray("weather").getJSONObject(0).getString("main");
 
+                    holder.deleteButton.setOnClickListener(v -> deleteItem(holder, savedLocation.getId()));
+
                     holder.itemView.post(() -> {
                         holder.temperaturaCiutat.setText(textTemperatura + "º");
                         Weather.canviarImatgeClima(textClima, holder.climaCiutat);
@@ -78,6 +83,13 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private void deleteItem(MyViewHolder holder, int id) {
+        SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(holder.itemView.getContext());
+        savedLocationDB.deleteLocation(id);
+        savedLocationList.removeIf(savedLocation -> savedLocation.getId() == id);
+        this.notifyDataSetChanged();
     }
 
     private void updateBackground(MyViewHolder holder, String clima) {
@@ -101,6 +113,7 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nomCiutat, temperaturaCiutat;
         ImageView climaCiutat;
+        ImageButton deleteButton;
         RelativeLayout relativeLayout;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -110,6 +123,7 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
             nomCiutat = itemView.findViewById(R.id.nom_ciutat);
             temperaturaCiutat = itemView.findViewById(R.id.temperatura_ciutat);
             climaCiutat = itemView.findViewById(R.id.clima_ciutat);
+            deleteButton = itemView.findViewById(R.id.delete_button);
             relativeLayout = itemView.findViewById(R.id.relative_layout);
 
         }

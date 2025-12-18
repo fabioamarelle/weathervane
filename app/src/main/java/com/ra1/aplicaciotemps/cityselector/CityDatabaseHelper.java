@@ -1,4 +1,4 @@
-package com.ra1.aplicaciotemps;
+package com.ra1.aplicaciotemps.cityselector;
 
 import android.content.Context;
 import android.database.Cursor;

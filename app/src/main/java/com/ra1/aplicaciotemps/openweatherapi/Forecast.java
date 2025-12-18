@@ -1,4 +1,4 @@
-package com.ra1.aplicaciotemps;
+package com.ra1.aplicaciotemps.openweatherapi;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

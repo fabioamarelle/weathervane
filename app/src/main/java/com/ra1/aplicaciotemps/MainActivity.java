@@ -11,6 +11,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.ra1.aplicaciotemps.openweatherapi.Forecast;
+import com.ra1.aplicaciotemps.openweatherapi.Geocoding;
+import com.ra1.aplicaciotemps.openweatherapi.Weather;
+import com.ra1.aplicaciotemps.utilities.LocationManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

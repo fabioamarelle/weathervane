@@ -2,6 +2,7 @@ package com.ra1.aplicaciotemps;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +16,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.ra1.aplicaciotemps.cityselector.CityDatabaseHelper;
+import com.ra1.aplicaciotemps.savedlocations.SavedLocation;
+import com.ra1.aplicaciotemps.savedlocations.SavedLocationAdapter;
+import com.ra1.aplicaciotemps.savedlocations.SavedLocationDatabaseHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,36 +38,31 @@ public class CitySelectorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_selector);
 
-
         // Ciutats guardades
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         List<SavedLocation> savedLocationList = new ArrayList<>();
+        SavedLocationDatabaseHelper db = new SavedLocationDatabaseHelper(this);
+        Cursor c = db.getLocations();
 
-        savedLocationList.add(new SavedLocation("Valls", "41.286",
-            "1.250"));
+        if (!(c.getCount() == 0)) {
 
-        savedLocationList.add(new SavedLocation("Tarragona", "41.117",
-            "1.250"));
+            c.moveToFirst();
+            do {
+                int id = c.getInt(0);
+                String nom = c.getString(1);
+                String lat = c.getString(2);
+                String lon = c.getString(3);
 
-        savedLocationList.add(new SavedLocation("Bràfim", "41.269",
-            "1.341"));
-
-        savedLocationList.add(new SavedLocation("New York", "40.7143",
-            "-74.006"));
-
-        savedLocationList.add(new SavedLocation("São Paulo", "-23.5475",
-                "-46.6361"));
-
-        savedLocationList.add(new SavedLocation("Buenos Aires", "-34.6132",
-                "-58.3772"));
+                savedLocationList.add(new SavedLocation(id, nom, lat, lon));
+            } while (c.moveToNext());
+            c.close();
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SavedLocationAdapter savedLocationAdapter = new SavedLocationAdapter(savedLocationList);
         recyclerView.setAdapter(savedLocationAdapter);
-
-
 
         // Buscador de ciutats
         searchAuto = findViewById(R.id.searchCityAuto);
@@ -104,7 +105,11 @@ public class CitySelectorActivity extends AppCompatActivity {
 
         searchAuto.setOnItemClickListener((parent, view, position, id) -> {
             String selection = adapter.getItem(position);
+
             String[] parts = selection.split("\\|");
+
+            SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(this);
+            savedLocationDB.insertLocation(parts[0], parts[1], parts[2]);
 
             Intent returnIntent = new Intent();
             returnIntent.putExtra("CITY_NAME", parts[0]);

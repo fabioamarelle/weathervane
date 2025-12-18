@@ -1,6 +1,8 @@
-package com.ra1.aplicaciotemps;
+package com.ra1.aplicaciotemps.openweatherapi;
 
 import android.widget.ImageView;
+
+import com.ra1.aplicaciotemps.R;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

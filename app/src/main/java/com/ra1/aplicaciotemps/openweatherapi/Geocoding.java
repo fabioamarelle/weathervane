@@ -1,4 +1,4 @@
-package com.ra1.aplicaciotemps;
+package com.ra1.aplicaciotemps.openweatherapi;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

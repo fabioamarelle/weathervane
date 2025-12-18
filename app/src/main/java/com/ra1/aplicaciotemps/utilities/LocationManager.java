@@ -1,4 +1,4 @@
-package com.ra1.aplicaciotemps;
+package com.ra1.aplicaciotemps.utilities;
 
 import android.Manifest;
 import android.content.Context;
