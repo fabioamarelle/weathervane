@@ -1,5 +1,7 @@
 package com.ra1.aplicaciotemps.openweatherapi;
 
+import com.ra1.aplicaciotemps.BuildConfig;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 public class Forecast {
     public static String getForecast(ArrayList<String> coordinates) {
         try {
-            String apiKey = "cc990afb60fd6a4a42b6614fdf9091cb";
+            String apiKey = BuildConfig.API_KEY;
             String urlString = "https://api.openweathermap.org/data/2.5/forecast?units=metric&lat=" +
                 coordinates.get(0)+"&lon="+coordinates.get(1)+"&appid="+apiKey;
 

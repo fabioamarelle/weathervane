@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,21 +33,24 @@ public class CitySelectorActivity extends AppCompatActivity {
     private AutoCompleteTextView searchAuto;
     private CityDatabaseHelper dbHelper;
     private ArrayAdapter<String> adapter;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_selector);
 
-        // Ciutats guardades
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.title_activity_city_selector);
+        }
+
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         List<SavedLocation> savedLocationList = new ArrayList<>();
         SavedLocationDatabaseHelper db = new SavedLocationDatabaseHelper(this);
         Cursor c = db.getLocations();
 
-        if (!(c.getCount() == 0)) {
+        if (c.getCount() > 0) {
             c.moveToFirst();
             do {
                 int id = c.getInt(0);
@@ -53,23 +58,40 @@ public class CitySelectorActivity extends AppCompatActivity {
                 String lat = c.getString(2);
                 String lon = c.getString(3);
 
-                savedLocationList.add(new SavedLocation(id, nom, lat, lon));
+                int isFavoriteInt = 0;
+                if (c.getColumnCount() > 4) {
+                    isFavoriteInt = c.getInt(4);
+                }
+
+                SavedLocation location = new SavedLocation(id, nom, lat, lon,false);
+                location.setFavorite(isFavoriteInt == 1);
+
+                savedLocationList.add(location);
             } while (c.moveToNext());
-            c.close();
         }
+        c.close();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SavedLocationAdapter savedLocationAdapter = new SavedLocationAdapter(this, savedLocationList);
         recyclerView.setAdapter(savedLocationAdapter);
 
-        // Buscador de ciutats
         searchAuto = findViewById(R.id.searchCityAuto);
+
+        searchAuto.setHint(R.string.search_hint);
+
         dbHelper = new CityDatabaseHelper(this);
 
         new Thread(() -> {
-            try { dbHelper.initializeDatabase(); }
-            catch (IOException e) { e.printStackTrace(); }
+            try {
+                dbHelper.initializeDatabase();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(CitySelectorActivity.this, R.string.error_db_init, Toast.LENGTH_LONG).show()
+                );
+            }
         }).start();
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>()) {
@@ -105,18 +127,20 @@ public class CitySelectorActivity extends AppCompatActivity {
         searchAuto.setOnItemClickListener((parent, view, position, id) -> {
             String selection = adapter.getItem(position);
 
-            String[] parts = selection.split("\\|");
+            if (selection != null) {
+                String[] parts = selection.split("\\|");
 
-            SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(this);
-            savedLocationDB.insertLocation(parts[0], parts[1], parts[2]);
+                SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(this);
+                savedLocationDB.insertLocation(parts[0], parts[1], parts[2]);
 
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("CITY_NAME", parts[0]);
-            returnIntent.putExtra("LAT", Double.parseDouble(parts[1]));
-            returnIntent.putExtra("LON", Double.parseDouble(parts[2]));
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("CITY_NAME", parts[0]);
+                returnIntent.putExtra("LAT", Double.parseDouble(parts[1]));
+                returnIntent.putExtra("LON", Double.parseDouble(parts[2]));
 
-            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            }
         });
     }
 

@@ -50,21 +50,6 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
 
         holder.nomCiutat.setText(savedLocation.getName());
 
-        // --- NEW LOGIC STARTS HERE ---
-
-        if (savedLocation.getId() == 0) {
-            holder.deleteButton.setVisibility(View.GONE);
-            handleCurrentLocationWeather(holder, savedLocation);
-
-        } else {
-            holder.deleteButton.setVisibility(View.VISIBLE);
-
-            ArrayList<String> coordinates = new ArrayList<>();
-            coordinates.add(savedLocation.getLat());
-            coordinates.add(savedLocation.getLon());
-            fetchWeather(coordinates, holder);
-        }
-
         holder.relativeLayout.setOnClickListener(v -> {
             if (context instanceof Activity) {
                 Intent returnIntent = new Intent();
@@ -80,8 +65,42 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
             }
         });
 
-        if (holder.deleteButton.getVisibility() == View.VISIBLE) {
-            holder.deleteButton.setOnClickListener(v -> deleteItem(holder, savedLocation.getId(), position));
+        holder.favoriteButton.setOnClickListener(v -> {
+            boolean newState = !savedLocation.isFavorite();
+            savedLocation.setFavorite(newState);
+
+            SavedLocationDatabaseHelper savedLocationDB = new SavedLocationDatabaseHelper(context);
+            savedLocationDB.updateFavoriteStatus(savedLocation.getId(), newState);
+
+            updateFavoriteIcon(holder, newState);
+        });
+
+        holder.deleteButton.setOnClickListener(v -> deleteItem(holder, savedLocation.getId(), position));
+
+        if (savedLocation.getId() == 0) {
+            holder.deleteButton.setVisibility(View.GONE);
+            holder.favoriteButton.setVisibility(View.GONE);
+
+            handleCurrentLocationWeather(holder, savedLocation);
+
+        } else {
+            holder.deleteButton.setVisibility(View.VISIBLE);
+            holder.favoriteButton.setVisibility(View.VISIBLE);
+
+            updateFavoriteIcon(holder, savedLocation.isFavorite());
+
+            ArrayList<String> coordinates = new ArrayList<>();
+            coordinates.add(savedLocation.getLat());
+            coordinates.add(savedLocation.getLon());
+            fetchWeather(coordinates, holder);
+        }
+    }
+
+    private void updateFavoriteIcon(MyViewHolder holder, boolean isFavorite) {
+        if (isFavorite) {
+            holder.favoriteButton.setImageResource(R.drawable.favorite_on);
+        } else {
+            holder.favoriteButton.setImageResource(R.drawable.favorite_off);
         }
     }
 
@@ -94,11 +113,13 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
 
                 savedLocationDB.updateCurrentLocation(cityName, coordinates.get(0), coordinates.get(1));
 
-                savedLocation.setName("Ubicació actual");
+                String currentLocationText = context.getString(R.string.saved_location_current);
+
+                savedLocation.setName(currentLocationText);
                 savedLocation.setLat(coordinates.get(0));
                 savedLocation.setLon(coordinates.get(1));
 
-                holder.itemView.post(() -> holder.nomCiutat.setText("Ubicació actual"));
+                holder.itemView.post(() -> holder.nomCiutat.setText(currentLocationText));
 
                 fetchWeather(coordinates, holder);
             }
@@ -119,7 +140,8 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
                     String textClima = weatherData.getJSONArray("weather").getJSONObject(0).getString("main");
 
                     holder.itemView.post(() -> {
-                        holder.temperaturaCiutat.setText(textTemperatura + "º");
+                        holder.temperaturaCiutat.setText(context.getString(R.string.degree_symbol, textTemperatura));
+
                         Weather.canviarImatgeClima(textClima, holder.climaCiutat);
                         updateBackground(holder, textClima);
                     });
@@ -156,10 +178,12 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
         return savedLocationList.size();
     }
 
+    // --- VIEW HOLDER ---
+
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nomCiutat, temperaturaCiutat;
         ImageView climaCiutat;
-        ImageButton deleteButton;
+        ImageButton deleteButton, favoriteButton;
         RelativeLayout relativeLayout;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -168,6 +192,9 @@ public class SavedLocationAdapter extends RecyclerView.Adapter<SavedLocationAdap
             temperaturaCiutat = itemView.findViewById(R.id.temperatura_ciutat);
             climaCiutat = itemView.findViewById(R.id.clima_ciutat);
             deleteButton = itemView.findViewById(R.id.delete_button);
+
+            favoriteButton = itemView.findViewById(R.id.favorite_button);
+
             relativeLayout = itemView.findViewById(R.id.relative_layout);
         }
     }

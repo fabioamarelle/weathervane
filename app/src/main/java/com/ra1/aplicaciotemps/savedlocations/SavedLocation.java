@@ -6,11 +6,14 @@ public class SavedLocation {
     private String lat;
     private String lon;
 
-    public SavedLocation(int id, String name, String lat, String lon) {
+    private boolean isFavorite;
+
+    public SavedLocation(int id, String name, String lat, String lon, boolean isFavorite) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;
         this.name = name;
+        this.isFavorite = isFavorite();
     }
 
     public int getId() {
@@ -38,5 +41,13 @@ public class SavedLocation {
 
     public void setLon(String lon) {
         this.lon = lon;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

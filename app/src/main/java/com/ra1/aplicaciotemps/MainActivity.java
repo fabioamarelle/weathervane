@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
                         ubicacioActualText.setText("");
                         cityTitleText.setText(cityName.split(",")[0]);
-                        ubicacioActual.setText("Ubicació seleccionada: " + cityName);
+                        ubicacioActual.setText(getString(R.string.location_selected, cityName));
 
                         userCoordinates = new ArrayList<>();
                         userCoordinates.add(String.valueOf(lat));
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) fetchWeatherByLocation();
-                else clima.setText("Permís de localització denegat.");
+                else clima.setText(getString(R.string.permission_denied));
             });
 
     @Override
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Inicialització de vistes (igual que abans)
         this.screenView = findViewById(R.id.constraint_layout);
         this.temperatura = findViewById(R.id.temperatura);
         this.clima = findViewById(R.id.clima);
@@ -121,13 +122,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationReady(ArrayList<String> coordinates) {
                 if (!modeManual) {
-                    ubicacioActualText.setText("Ubicació actual");
+                    ubicacioActualText.setText(getString(R.string.location_current_title));
                     userCoordinates = coordinates;
                     new Thread(() -> {
                         final String cityName = Geocoding.getCityNameByCoordinates(userCoordinates);
                         runOnUiThread(() -> {
                             cityTitleText.setText(cityName);
-                            ubicacioActual.setText("Ubicació actual: " + cityName);
+                            ubicacioActual.setText(getString(R.string.location_current_text, cityName));
                         });
                         updateWeatherData();
                     }).start();
@@ -155,10 +156,10 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    protected void showWeather(String result){
+    protected void showWeather(String result) {
         if (result.startsWith("Error") || result.equals("-")) {
             clima.setText(result);
-            temperatura.setText("--");
+            temperatura.setText(getString(R.string.temp_placeholder));
             rangTemperatura.setText("");
             sensacioTermica.setText("");
             imatgeClima.setImageResource(android.R.drawable.ic_dialog_alert);
@@ -169,92 +170,65 @@ public class MainActivity extends AppCompatActivity {
             JSONObject weatherData = new JSONObject(result);
 
             long textTemperatura = Math.round(weatherData.getJSONObject("main").getDouble("temp"));
-            this.temperatura.setText(textTemperatura + "º");
+            this.temperatura.setText(getString(R.string.degree_symbol, textTemperatura));
 
-            String textClima = weatherData.getJSONArray("weather").getJSONObject(0).getString("main");
-            Weather.canviarImatgeClima(textClima, imatgeClima);
-            switch (textClima) {
-                case "Clouds":
-                    this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.cloudybackground));
-                    break;
-                case "Clear":
-                    this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.clearbackground));
-                    break;
-                case "Snow":
-                    this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.cloudybackground));
-                    break;
-                case "Rain":
-                    this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rainbackground));
-                    break;
-                case "Drizzle":
-                    this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rainbackground));
-                    break;
-                case "Thunderstorm":
-                    this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rainbackground));
-                    break;
-                default:
-                    this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.cloudybackground));
-                    break;
-            }
-            this.clima.setText(textClima);
+            String textClimaApi = weatherData.getJSONArray("weather").getJSONObject(0).getString("main");
+
+            updateBackgroundAndImage(textClimaApi, imatgeClima);
+
+            this.clima.setText(getLocalizedWeatherName(textClimaApi));
 
             long textTemperaturaMin = Math.round(weatherData.getJSONObject("main").getDouble("temp_min"));
             long textTemperaturaMax = Math.round(weatherData.getJSONObject("main").getDouble("temp_max"));
-            this.rangTemperatura.setText("Mínima: " + textTemperaturaMin + "º - Màxima " + textTemperaturaMax + "º");
+
+            this.rangTemperatura.setText(getString(R.string.temp_range_format, textTemperaturaMin, textTemperaturaMax));
 
             long textSensacioTermica = Math.round(weatherData.getJSONObject("main").getDouble("feels_like"));
-            this.sensacioTermica.setText("Sensació tèrmica: " + textSensacioTermica + "º");
+            this.sensacioTermica.setText(getString(R.string.feels_like_format, textSensacioTermica));
 
         } catch (JSONException e) {
-            this.clima.setText("Error deserialitzant dades");
+            this.clima.setText(getString(R.string.error_data));
         }
     }
 
-
-
-    protected void showForecast(String result){
+    protected void showForecast(String result) {
         if (result.startsWith("Error") || result.equals("-")) {
-            clima.setText(result);
-            temperatura.setText("--");
-            rangTemperatura.setText("");
-            sensacioTermica.setText("");
-            imatgeClima.setImageResource(android.R.drawable.ic_dialog_alert);
             return;
         }
         try {
             JSONObject weatherData = new JSONObject(result);
 
-            double textTemperaturaMax1 = Math.round(weatherData.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp_max"));
-            double textTemperaturaMax2 = Math.round(weatherData.getJSONArray("list").getJSONObject(1).getJSONObject("main").getDouble("temp_max"));
-            double textTemperaturaMax3 = Math.round(weatherData.getJSONArray("list").getJSONObject(2).getJSONObject("main").getDouble("temp_max"));
+            double max1 = Math.round(weatherData.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp_max"));
+            double max2 = Math.round(weatherData.getJSONArray("list").getJSONObject(1).getJSONObject("main").getDouble("temp_max"));
+            double max3 = Math.round(weatherData.getJSONArray("list").getJSONObject(2).getJSONObject("main").getDouble("temp_max"));
 
-            double textTemperaturaMin1 = Math.round(weatherData.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp_min"));
-            double textTemperaturaMin2 = Math.round(weatherData.getJSONArray("list").getJSONObject(1).getJSONObject("main").getDouble("temp_min"));
-            double textTemperaturaMin3 = Math.round(weatherData.getJSONArray("list").getJSONObject(2).getJSONObject("main").getDouble("temp_min"));
+            double min1 = Math.round(weatherData.getJSONArray("list").getJSONObject(0).getJSONObject("main").getDouble("temp_min"));
+            double min2 = Math.round(weatherData.getJSONArray("list").getJSONObject(1).getJSONObject("main").getDouble("temp_min"));
+            double min3 = Math.round(weatherData.getJSONArray("list").getJSONObject(2).getJSONObject("main").getDouble("temp_min"));
 
-            int probabilitatPluja1 = (int) (weatherData.getJSONArray("list").getJSONObject(0).getDouble("pop") * 100);
-            int probabilitatPluja2 = (int) (weatherData.getJSONArray("list").getJSONObject(1).getDouble("pop") * 100);
-            int probabilitatPluja3 = (int) (weatherData.getJSONArray("list").getJSONObject(2).getDouble("pop") * 100);
+            int pop1 = (int) (weatherData.getJSONArray("list").getJSONObject(0).getDouble("pop") * 100);
+            int pop2 = (int) (weatherData.getJSONArray("list").getJSONObject(1).getDouble("pop") * 100);
+            int pop3 = (int) (weatherData.getJSONArray("list").getJSONObject(2).getDouble("pop") * 100);
 
-            String textClima1 = weatherData.getJSONArray("list").getJSONObject(0).getJSONArray("weather").getJSONObject(0).getString("main");
-            String textClima2 = weatherData.getJSONArray("list").getJSONObject(1).getJSONArray("weather").getJSONObject(0).getString("main");
-            String textClima3 = weatherData.getJSONArray("list").getJSONObject(2).getJSONArray("weather").getJSONObject(0).getString("main");
+            String clima1 = weatherData.getJSONArray("list").getJSONObject(0).getJSONArray("weather").getJSONObject(0).getString("main");
+            String clima2 = weatherData.getJSONArray("list").getJSONObject(1).getJSONArray("weather").getJSONObject(0).getString("main");
+            String clima3 = weatherData.getJSONArray("list").getJSONObject(2).getJSONArray("weather").getJSONObject(0).getString("main");
 
-            this.previsioTempMaxima1.setText((int) textTemperaturaMax1 + "º");
-            this.previsioTempMaxima2.setText((int) textTemperaturaMax2 + "º");
-            this.previsioTempMaxima3.setText((int) textTemperaturaMax3 + "º");
+            this.previsioTempMaxima1.setText(getString(R.string.degree_symbol, (int) max1));
+            this.previsioTempMaxima2.setText(getString(R.string.degree_symbol, (int) max2));
+            this.previsioTempMaxima3.setText(getString(R.string.degree_symbol, (int) max3));
 
-            this.previsioTempMinima1.setText((int) textTemperaturaMin1 + "º");
-            this.previsioTempMinima2.setText((int) textTemperaturaMin2 + "º");
-            this.previsioTempMinima3.setText((int) textTemperaturaMin3 + "º");
+            this.previsioTempMinima1.setText(getString(R.string.degree_symbol, (int) min1));
+            this.previsioTempMinima2.setText(getString(R.string.degree_symbol, (int) min2));
+            this.previsioTempMinima3.setText(getString(R.string.degree_symbol, (int) min3));
 
-            this.previsioPluja1.setText(probabilitatPluja1 + "%");
-            this.previsioPluja2.setText(probabilitatPluja2 + "%");
-            this.previsioPluja3.setText(probabilitatPluja3 + "%");
+            this.previsioPluja1.setText(getString(R.string.percentage_symbol, pop1));
+            this.previsioPluja2.setText(getString(R.string.percentage_symbol, pop2));
+            this.previsioPluja3.setText(getString(R.string.percentage_symbol, pop3));
 
-            Weather.canviarImatgeClima(textClima1, previsioIcona1);
-            Weather.canviarImatgeClima(textClima2, previsioIcona2);
-            Weather.canviarImatgeClima(textClima3, previsioIcona3);
+            Weather.canviarImatgeClima(clima1, previsioIcona1);
+            Weather.canviarImatgeClima(clima2, previsioIcona2);
+            Weather.canviarImatgeClima(clima3, previsioIcona3);
 
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -265,7 +239,40 @@ public class MainActivity extends AppCompatActivity {
             previsioData3.setText(String.format(Locale.getDefault(), "%02d/%02d", calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1));
 
         } catch (JSONException e) {
-            this.ubicacioActual.setText("Error deserialitzant dades: " + e.getMessage());
+            this.ubicacioActual.setText(getString(R.string.error_data_details, e.getMessage()));
+        }
+    }
+
+    private void updateBackgroundAndImage(String apiWeather, ImageView imageView) {
+        Weather.canviarImatgeClima(apiWeather, imageView);
+        switch (apiWeather) {
+            case "Clouds":
+            case "Snow":
+                this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.cloudybackground));
+                break;
+            case "Clear":
+                this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.clearbackground));
+                break;
+            case "Rain":
+            case "Drizzle":
+            case "Thunderstorm":
+                this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rainbackground));
+                break;
+            default:
+                this.screenView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.cloudybackground));
+                break;
+        }
+    }
+
+    private String getLocalizedWeatherName(String apiWeather) {
+        switch (apiWeather) {
+            case "Clouds": return getString(R.string.weather_clouds);
+            case "Clear": return getString(R.string.weather_clear);
+            case "Snow": return getString(R.string.weather_snow);
+            case "Rain": return getString(R.string.weather_rain);
+            case "Drizzle": return getString(R.string.weather_drizzle);
+            case "Thunderstorm": return getString(R.string.weather_thunderstorm);
+            default: return getString(R.string.weather_unknown);
         }
     }
 }

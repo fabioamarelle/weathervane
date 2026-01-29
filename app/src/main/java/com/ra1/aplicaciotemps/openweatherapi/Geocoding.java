@@ -1,5 +1,7 @@
 package com.ra1.aplicaciotemps.openweatherapi;
 
+import com.ra1.aplicaciotemps.BuildConfig;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 public class Geocoding {
     public static ArrayList<String> getCoordinatesByCityName(String cityName){
         try {
-            String apiKey = "cc990afb60fd6a4a42b6614fdf9091cb";
+            String apiKey = BuildConfig.API_KEY;
             String urlString = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName
                     + "&appid=" + apiKey;
 
@@ -50,7 +52,7 @@ public class Geocoding {
 
     public static String getCityNameByCoordinates(ArrayList<String> coordinates){
         try {
-            String apiKey = "cc990afb60fd6a4a42b6614fdf9091cb";
+            String apiKey = BuildConfig.API_KEY;
             String urlString = "https://api.openweathermap.org/geo/1.0/reverse?lat="+
                     coordinates.get(0)+"&lon="+coordinates.get(1)+"&appid="+ apiKey;
 

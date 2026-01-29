@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.InputStream
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -14,6 +17,22 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        val localPropertiesFile = project.rootProject.file("local.properties")
+
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use { stream: InputStream ->
+                properties.load(stream)
+            }
+        }
+
+        val apiKey = properties.getProperty("API_KEY") ?: ""
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -32,7 +51,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

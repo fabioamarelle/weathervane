@@ -8,19 +8,27 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SavedLocationDatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "savedlocations.db";
-
     public SavedLocationDatabaseHelper(Context context) {
-        super(context, DB_NAME, null, 1);
-    }
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE saved_locations(id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT, lat TEXT, lon TEXT)");
-        db.execSQL("INSERT INTO saved_locations (id, nom, lat, lon) VALUES (0, 'Ubicació actual', '-', '-')");
+        super(context, DB_NAME, null, 2);
     }
 
-    // Actualització de la base de dades
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS saved_locations");
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE saved_locations(id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT, lat TEXT, lon TEXT, is_favorite INTEGER DEFAULT 0)");
+        db.execSQL("INSERT INTO saved_locations (id, nom, lat, lon, is_favorite) VALUES (0, 'Ubicació actual', '-', '-', 0)");
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            try {
+                db.execSQL("ALTER TABLE saved_locations ADD COLUMN is_favorite INTEGER DEFAULT 0");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Inserir ubicació
     public boolean insertLocation (String nom, String lat, String lon) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -43,6 +51,7 @@ public class SavedLocationDatabaseHelper extends SQLiteOpenHelper {
         values.put("nom", nom);
         values.put("lat", lat);
         values.put("lon", lon);
+        values.put("is_favorite", 1);
 
         long columnesAfectades = db.update("saved_locations", values, "id=?", new String[]{"0"});
         db.close();
@@ -50,12 +59,13 @@ public class SavedLocationDatabaseHelper extends SQLiteOpenHelper {
         return columnesAfectades != -1;
     }
 
-    // Obtenir ubicacions
     public Cursor getLocations() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(
-            "saved_locations",null,null,null,null,null,"id"
-        );
+
+        String orderBy = "is_favorite DESC, id ASC";
+
+        return db.query("saved_locations",null,null,
+        null,null,null,orderBy);
     }
 
     // Eliminar ubicacions
@@ -66,4 +76,14 @@ public class SavedLocationDatabaseHelper extends SQLiteOpenHelper {
         return columnesAfectades != 0;
     }
 
+    public boolean updateFavoriteStatus(int id, boolean isFavorite) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("is_favorite", isFavorite ? 1 : 0);
+
+        int columnesAfectades = db.update("saved_locations", values, "id=?", new String[]{String.valueOf(id)});
+
+        return columnesAfectades > 0;
+    }
 }

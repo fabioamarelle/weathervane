@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeatherApp</string>
+
+    <string name="permission_denied">Location permission denied.</string>
+    <string name="location_selected">Selected location: %1$s</string>
+    <string name="location_current_title">Current location</string>
+    <string name="location_current_text">Current location: %1$s</string>
+
+    <string name="temp_range_format">Min: %1$dº - Max %2$dº</string>
+    <string name="feels_like_format">Feels like: %1$dº</string>
+    <string name="temp_placeholder">--</string>
+    <string name="degree_symbol">%1$dº</string>
+    <string name="percentage_symbol">%1$d%%</string>
+
+    <string name="error_data">Error parsing data</string>
+    <string name="error_data_details">Error parsing data: %1$s</string>
+
+    <string name="weather_clouds">Clouds</string>
+    <string name="weather_clear">Clear</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_drizzle">Drizzle</string>
+    <string name="weather_thunderstorm">Thunderstorm</string>
+    <string name="weather_unknown">Unknown</string>
+
+    <string name="title_activity_city_selector">Select City</string>
+    <string name="search_hint">Search for a city…</string>
+    <string name="saved_locations_header">Saved Locations</string>
+    <string name="error_db_init">Error loading city database.</string>
+
+    <string name="info_app_title">Weather Forecast</string>
+    <string name="info_developed_by">Developed by</string>
+    <string name="info_student_name">Fabio Amarelle Rodrigues</string>
+    <string name="info_course_details">Project RA1 and RA2\nMultimedia Programming and\nMobile Devices</string>
+    <string name="info_footer">© 2025 Institut Jaume Huguet</string>
+
+    <string name="saved_location_current">Current location</string>
+</resources>

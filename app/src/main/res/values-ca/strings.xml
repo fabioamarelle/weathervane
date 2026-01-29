@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AplicacioTemps</string>
+    <string name="app_name">Weathervane</string>
 
     <string name="permission_denied">Permís de localització denegat.</string>
     <string name="location_selected">Ubicació seleccionada: %1$s</string>
@@ -22,7 +23,7 @@
     <string name="weather_unknown">Desconegut</string>
 
     <string name="title_activity_city_selector">Seleccionar ciutat</string>
-    <string name="search_hint">Cerca una ciutat...</string>
+    <string name="search_hint">Cerca una ciutat…</string>
     <string name="saved_locations_header">Ubicacions guardades</string>
     <string name="error_db_init">Error carregant la base de dades de ciutats.</string>
 

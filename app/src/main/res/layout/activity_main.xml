@@ -12,22 +12,25 @@
 
     <TextView
         android:id="@+id/cityTitleText"
-        android:layout_width="271dp"
-        android:layout_height="35dp"
-        android:text="Valls"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
         android:textColor="#FFFFFF"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/btnChangeLocation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Valls" />
 
     <TextView
         android:id="@+id/ubicacioActualText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Ubicació actual"
+        android:text="@string/location_current_title"
         android:textColor="#E0E0E0"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/cityTitleText"
@@ -37,12 +40,11 @@
         android:id="@+id/btnChangeLocation"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Change Location"
+        android:contentDescription="@string/title_activity_city_selector"
         app:layout_constraintBottom_toBottomOf="@+id/ubicacioActualText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cityTitleText"
         app:layout_constraintTop_toTopOf="@+id/cityTitleText"
         app:srcCompat="@android:drawable/ic_menu_search"
         app:tint="#FFFFFF" />
@@ -51,8 +53,8 @@
         android:id="@+id/imatgeClima"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginTop="32dp"
-        android:contentDescription="Weather Icon"
+        android:layout_marginTop="48dp"
+        android:contentDescription="@string/weather_unknown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ubicacioActualText"
@@ -63,7 +65,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Cel clar"
+        tools:text="Cel clar"
+        android:text="@string/temp_placeholder"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -76,9 +79,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
-        android:text="22º"
+        tools:text="22º"
+        android:text="@string/temp_placeholder"
         android:textColor="#FFFFFF"
-        android:textSize="96sp"
+        android:textSize="120sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clima" />
@@ -87,7 +91,7 @@
         android:id="@+id/sensacioTermica"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sensació tèrmica: 24º"
+        tools:text="Sensació tèrmica: 24º"
         android:textColor="#E0E0E0"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Mínima: 15º - Màxima 25º"
+        tools:text="Mínima: 15º - Màxima 25º"
         android:textColor="#E0E0E0"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="13/10"
+                tools:text="13/10"
                 android:textColor="#E0E0E0"
                 android:textStyle="bold" />
 
@@ -138,14 +142,15 @@
                 android:id="@+id/previsioIcona1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:srcCompat="@drawable/clear_day" />
+                tools:srcCompat="@drawable/clear_day"
+                android:contentDescription="@string/weather_unknown"/>
 
             <TextView
                 android:id="@+id/previsioTempMaxima1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="21º"
+                android:text="@string/temp_placeholder"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
@@ -153,7 +158,7 @@
                 android:id="@+id/previsioTempMinima1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="6º"
+                android:text="@string/temp_placeholder"
                 android:textColor="#CCCCCC" />
 
             <TextView
@@ -161,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="30%"
+                tools:text="30%"
                 android:textColor="#AACCFF"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -178,7 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="14/10"
+                tools:text="14/10"
                 android:textColor="#E0E0E0"
                 android:textStyle="bold" />
 
@@ -186,14 +191,15 @@
                 android:id="@+id/previsioIcona2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:srcCompat="@drawable/clear_day" />
+                tools:srcCompat="@drawable/clear_day"
+                android:contentDescription="@string/weather_unknown"/>
 
             <TextView
                 android:id="@+id/previsioTempMaxima2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="20º"
+                android:text="@string/temp_placeholder"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
@@ -201,7 +207,7 @@
                 android:id="@+id/previsioTempMinima2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8º"
+                android:text="@string/temp_placeholder"
                 android:textColor="#CCCCCC" />
 
             <TextView
@@ -209,7 +215,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="10%"
+                tools:text="10%"
                 android:textColor="#AACCFF"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -226,7 +232,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="15/10"
+                tools:text="15/10"
                 android:textColor="#E0E0E0"
                 android:textStyle="bold" />
 
@@ -234,14 +240,15 @@
                 android:id="@+id/previsioIcona3"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:srcCompat="@drawable/clear_day" />
+                tools:srcCompat="@drawable/clear_day"
+                android:contentDescription="@string/weather_unknown"/>
 
             <TextView
                 android:id="@+id/previsioTempMaxima3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="19º"
+                android:text="@string/temp_placeholder"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
@@ -249,7 +256,7 @@
                 android:id="@+id/previsioTempMinima3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5º"
+                android:text="@string/temp_placeholder"
                 android:textColor="#CCCCCC" />
 
             <TextView
@@ -257,7 +264,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="0%"
+                tools:text="0%"
                 android:textColor="#AACCFF"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -268,22 +275,23 @@
         android:id="@+id/ubicacioActual"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Ubicació actual: N/A"
+        android:layout_marginBottom="24dp"
         android:textAlignment="center"
         android:textColor="#E0E0E0"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Ubicació actual: N/A" />
 
     <ImageButton
         android:id="@+id/infoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="#00FFFFFF"
+        android:contentDescription="@string/info_app_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_dialog_info"
