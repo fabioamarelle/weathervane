@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AplicacioTemps</string>
+    <string name="app_name">Weathervane</string>
 
     <string name="permission_denied">Permiso de ubicación denegado.</string>
     <string name="location_selected">Ubicación seleccionada: %1$s</string>

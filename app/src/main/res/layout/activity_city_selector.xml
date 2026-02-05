@@ -5,7 +5,7 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#646AAD"
+    android:background="@drawable/screen_background_city_selector"
     android:focusableInTouchMode="true">
 
     <TextView
@@ -15,6 +15,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="64dp"
         android:text="@string/title_activity_city_selector"
+        android:textColor="#FFFFFF"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +65,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchContainer"
-        tools:listitem="@layout/saved_location" />
+        tools:listitem="@layout/fragment_saved_location" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

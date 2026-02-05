@@ -8,7 +8,7 @@
     android:background="#696995"
     android:fitsSystemWindows="true"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".views.activities.MainActivity">
 
     <TextView
         android:id="@+id/cityTitleText"
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ubicacioActualText"
-        tools:srcCompat="@drawable/clear_day" />
+        tools:srcCompat="@drawable/weather_icon_clear" />
 
     <TextView
         android:id="@+id/clima"
@@ -142,7 +142,7 @@
                 android:id="@+id/previsioIcona1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:srcCompat="@drawable/clear_day"
+                tools:srcCompat="@drawable/weather_icon_clear"
                 android:contentDescription="@string/weather_unknown"/>
 
             <TextView
@@ -191,7 +191,7 @@
                 android:id="@+id/previsioIcona2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:srcCompat="@drawable/clear_day"
+                tools:srcCompat="@drawable/weather_icon_clear"
                 android:contentDescription="@string/weather_unknown"/>
 
             <TextView
@@ -240,7 +240,7 @@
                 android:id="@+id/previsioIcona3"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:srcCompat="@drawable/clear_day"
+                tools:srcCompat="@drawable/weather_icon_clear"
                 android:contentDescription="@string/weather_unknown"/>
 
             <TextView

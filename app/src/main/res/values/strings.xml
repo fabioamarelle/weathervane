@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AplicacioTemps</string>
+    <string name="app_name">Weathervane</string>
 
     <string name="permission_denied">Permís de localització denegat.</string>
     <string name="location_selected">Ubicació seleccionada: %1$s</string>
@@ -23,14 +23,15 @@
 
     <string name="title_activity_city_selector">Seleccionar ciutat</string>
     <string name="search_hint">Cerca una ciutat...</string>
-    <string name="saved_locations_header">Ubicacions guardades</string>
     <string name="error_db_init">Error carregant la base de dades de ciutats.</string>
 
     <string name="info_app_title">Previsió del temps</string>
     <string name="info_developed_by">Desenvolupat per</string>
     <string name="info_student_name">Fabio Amarelle Rodrigues</string>
     <string name="info_course_details">Projecte RA1 i RA2\nProgramació Multimèdia i\nDispositius Mòbils</string>
-    <string name="info_footer">© 2025 Institut Jaume Huguet</string>
 
     <string name="saved_location_current">Ubicació actual</string>
+    <string name="saved_locations_header">Saved Locations</string>
+    <string name="info_footer">© 2025 Institut Jaume Huguet</string>
+
 </resources>

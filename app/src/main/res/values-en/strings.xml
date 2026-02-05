@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WeatherApp</string>
+    <string name="app_name">Weathervane</string>
 
     <string name="permission_denied">Location permission denied.</string>
     <string name="location_selected">Selected location: %1$s</string>
@@ -29,7 +29,7 @@
     <string name="saved_locations_header">Saved Locations</string>
     <string name="error_db_init">Error loading city database.</string>
 
-    <string name="info_app_title">Weather Forecast</string>
+    <string name="info_app_title">Weather forecast app</string>
     <string name="info_developed_by">Developed by</string>
     <string name="info_student_name">Fabio Amarelle Rodrigues</string>
     <string name="info_course_details">Project RA1 and RA2\nMultimedia Programming and\nMobile Devices</string>

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AplicacioTemps">
         <activity
-            android:name=".MainActivity"
+            android:name=".views.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".InfoActivity"
+            android:name=".views.activities.InfoActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".CitySelectorActivity"
+            android:name=".views.activities.CitySelectorActivity"
             android:exported="true">
         </activity>
 
